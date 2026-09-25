@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"];
 
     // check the field are now empty; 
-    if ($username === "" || $password = "") {
+    if ($username === "" || $password === "") {
         $message = "User name and password are required.";
     } else {
         $stmt = mysqli_prepare(

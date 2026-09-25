@@ -55,7 +55,7 @@ VALUE (
     'System Administrator',
     'admin@gmail.com', 
     'Admin',
-    'admin1234',
+    '12345',
     'admin'
 );
 
