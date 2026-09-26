@@ -46,7 +46,7 @@ if (!$result) {
         </thead>
 
         <Tbody>
-            <?php while($employee = mysqli_fetch_assoc($result)): ?>
+            <?php while ($employee = mysqli_fetch_assoc($result)): ?>
                 <tr>
                     <td><?php echo $employee["id"] ?></td>
                     <td><?php echo htmlspecialchars($employee["name"]) ?></td>
@@ -56,7 +56,14 @@ if (!$result) {
                     <td>
                         <a href="./edit.php?id=<?php echo $employee["id"]; ?>">Edit</a>|
                         <a href="./view.php?id=<?php echo $employee["id"]; ?>">View</a>|
-                        <a href="./delete.php?id=<?php echo $employee["id"]; ?>">Delete</a>
+                        <form action="delete.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                            <input type="hidden" name="id" value="<?php echo $employee["id"]; ?>">
+
+                            <button type="submit">
+                                Delete
+                            </button>
+
+                        </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
