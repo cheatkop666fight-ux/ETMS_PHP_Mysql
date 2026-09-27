@@ -1,4 +1,5 @@
 <?php
+//include/employee_auth.ph
 require_once "auth.php";
 
 if ($_SESSION["role"] !== "employee" ){
