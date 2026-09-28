@@ -34,7 +34,7 @@ require_once "../../includes/admin_auth.php"
             </div><br>
             <div>
                 <label for="conpassword">Confirm Password</label>
-                <input type="text" name="conpassword" id="conpassword" required>
+                <input type="password" name="conpassword" id="conpassword" required>
             </div><br>
             <button type="submit">Create Employee</button>
         </fieldset>

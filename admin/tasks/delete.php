@@ -2,123 +2,53 @@
 
 require_once "../../includes/admin_auth.php";
 require_once "../../config/database.php";
+require_once "../../includes/csrf.php";
 
+// 1. Post only 
 
-/*
-|--------------------------------------------------------------------------
-| 1. Validate task ID
-|--------------------------------------------------------------------------
-*/
+if ($_SERVER["REQUEST_METHOD"] !== "POST"){
+    http_response_code(405);
+    die("Method not allowed.");
+}
 
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+// 2. Verify csrf
 
+$token = $_POST["csrf_token"] ?? "";
+if (!verify_csrf_token($token)) {
+    http_response_code(403);
+    die("Invalid CSRF token.");
+}
+
+// 3. validate task ID
+
+$taskId = $_POST["taskId"] ?? "";
+
+if ($taskId === "" || !is_numeric($taskId)){
     die("Invalid task ID.");
 }
 
+$taskId = (int) $taskId;
 
-$taskId = (int) $_GET["id"];
-
-
-/*
-|--------------------------------------------------------------------------
-| 2. Check whether task exists
-|--------------------------------------------------------------------------
-*/
-
+// 4. Delete task
 $stmt = mysqli_prepare(
     $conn,
-    "SELECT taskId
-     FROM tasks
-     WHERE taskId = ?"
+    "DELETE FROM tasks WHERE taskId = ?"
 );
 
-
-if (!$stmt) {
-
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
+if (!$stmt){
+    die("Prepare failed:" . mysqli_error($conn));
 }
 
+mysqli_stmt_bind_param($stmt,"i",$taskId);
 
-mysqli_stmt_bind_param(
-    $stmt,
-    "i",
-    $taskId
-);
-
-
-if (!mysqli_stmt_execute($stmt)) {
-
-    die(
-        "Execute failed: " .
-        mysqli_stmt_error($stmt)
-    );
+if(!mysqli_stmt_execute($stmt)) {
+    die("Delete failed:" . mysqli_stmt_error($stmt) );
 }
-
-
-$result = mysqli_stmt_get_result($stmt);
-
-$task = mysqli_fetch_assoc($result);
-
 
 mysqli_stmt_close($stmt);
 
-
-if (!$task) {
-
-    die("Task not found.");
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| 3. Delete task
-|--------------------------------------------------------------------------
-*/
-
-$stmt = mysqli_prepare(
-    $conn,
-    "DELETE FROM tasks
-     WHERE taskId = ?"
-);
-
-
-if (!$stmt) {
-
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
-}
-
-
-mysqli_stmt_bind_param(
-    $stmt,
-    "i",
-    $taskId
-);
-
-
-if (!mysqli_stmt_execute($stmt)) {
-
-    die(
-        "Delete failed: " .
-        mysqli_stmt_error($stmt)
-    );
-}
-
-
-mysqli_stmt_close($stmt);
-
-
-/*
-|--------------------------------------------------------------------------
-| 4. Redirect
-|--------------------------------------------------------------------------
-*/
+// 5. Redirect
 
 header("Location: index.php");
-
 exit;
+?>

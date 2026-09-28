@@ -2,6 +2,7 @@
 
 require_once "../../includes/employee_auth.php";
 require_once "../../config/database.php";
+require_once "../../includes/csrf.php";
 
 
 $userId = $_SESSION["user_id"];
@@ -45,10 +46,8 @@ $stmt = mysqli_prepare(
 
 if (!$stmt) {
 
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
+    die("Prepare failed: " .
+        mysqli_error($conn));
 }
 
 
@@ -62,10 +61,8 @@ mysqli_stmt_bind_param(
 
 if (!mysqli_stmt_execute($stmt)) {
 
-    die(
-        "Execute failed: " .
-        mysqli_stmt_error($stmt)
-    );
+    die("Execute failed: " .
+        mysqli_stmt_error($stmt));
 }
 
 
@@ -95,8 +92,7 @@ if (!$task) {
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>View My Task</title>
 
@@ -242,66 +238,65 @@ if (!$task) {
 
     <h2>Update Status</h2>
 
-<form action="update_status.php" method="post">
+    <form action="update_status.php" method="post">
 
-    <input
-        type="hidden"
-        name="taskId"
-        value="<?php echo $task["taskId"]; ?>"
-    >
+        <input
+            type="hidden"
+            name="taskId"
+            value="<?php echo $task["taskId"]; ?>">
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="<?php echo htmlspecialchars(csrf_token()); ?>">
 
-    <label for="status">
-        Status
-    </label>
+        <label for="status">
+            Status
+        </label>
 
-    <select
-        name="status"
-        id="status"
-        required
-    >
+        <select
+            name="status"
+            id="status"
+            required>
 
-        <option
-            value="incomplete"
-            <?php
-            echo $task["status"] === "incomplete"
-                ? "selected"
-                : "";
-            ?>
-        >
-            Incomplete
-        </option>
-
-
-        <option
-            value="progressing"
-            <?php
-            echo $task["status"] === "progressing"
-                ? "selected"
-                : "";
-            ?>
-        >
-            Progressing
-        </option>
+            <option
+                value="incomplete"
+                <?php
+                echo $task["status"] === "incomplete"
+                    ? "selected"
+                    : "";
+                ?>>
+                Incomplete
+            </option>
 
 
-        <option
-            value="completed"
-            <?php
-            echo $task["status"] === "completed"
-                ? "selected"
-                : "";
-            ?>
-        >
-            Completed
-        </option>
+            <option
+                value="progressing"
+                <?php
+                echo $task["status"] === "progressing"
+                    ? "selected"
+                    : "";
+                ?>>
+                Progressing
+            </option>
 
-    </select>
 
-    <button type="submit">
-        Update Status
-    </button>
+            <option
+                value="completed"
+                <?php
+                echo $task["status"] === "completed"
+                    ? "selected"
+                    : "";
+                ?>>
+                Completed
+            </option>
 
-</form>
+        </select>
+
+        <button type="submit">
+            Update Status
+        </button>
+
+    </form>
 
 </body>
 

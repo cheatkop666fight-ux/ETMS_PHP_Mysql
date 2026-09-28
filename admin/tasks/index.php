@@ -2,6 +2,7 @@
 
 require_once "../../includes/admin_auth.php";
 require_once "../../config/database.php";
+require_once "../../includes/csrf.php";
 
 $sql =
     "SELECT t.taskId, t.title, t.description, t.startDate, t.dueDate, t.status, t.priority, t.createdAt, u.name as employeeName
@@ -58,9 +59,11 @@ if (!$result) {
                     <td>
                         <a href="view.php?id=<?php echo $task["taskId"]; ?> "> View </a>|
                         <a href="edit.php?id=<?php echo $task["taskId"]; ?> "> Edit </a>
-                        <a href="delete.php?id=<?php echo $task["taskId"]; ?> " 
-                        onclick="return confirm('Are you sure you want to delete this task?')"> Delete </a>
-
+                        <form action="delete.php" method="post" style="display:inline;">
+                            <input type="hidden" name="taskId" value="<?php echo $task["taskId"]; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token()); ?>">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this task? ')">Delete</button>
+                        </form>
                     </td>
 
                 </tr>

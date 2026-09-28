@@ -2,6 +2,25 @@
 
 require_once "../../includes/employee_auth.php";
 require_once "../../config/database.php";
+require_once "../../includes/csrf.php";
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+
+    http_response_code(405);
+
+    die("Method Not Allowed.");
+}
+
+
+$token = $_POST["csrf_token"] ?? "";
+
+
+if (!verify_csrf_token($token)) {
+
+    http_response_code(403);
+
+    die("Invalid CSRF token.");
+}
 
 
 $userId = $_SESSION["user_id"];
