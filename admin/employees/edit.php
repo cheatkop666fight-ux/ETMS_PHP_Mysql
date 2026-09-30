@@ -67,113 +67,172 @@ if (!$employee) {
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Edit Employee</title>
+    <title>ETMS // Edit Employee</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css"
+    >
 
 </head>
 
+
 <body>
 
-    <h1>Edit Employee</h1>
+<div class="app">
 
 
-    <form action="update.php" method="POST">
-
-        <fieldset>
-
-            <legend>Edit Employee</legend>
+    <?php
+    require_once "../../includes/admin_sidebar.php";
+    ?>
 
 
-            <input
-                type="hidden"
-                name="id"
-                value="<?php echo $employee["id"]; ?>">
+    <div class="main">
 
 
-            <div>
-
-                <label for="name">
-                    Name
-                </label>
-
-                <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    value="<?php
-                            echo htmlspecialchars(
-                                $employee["name"]
-                            );
-                            ?>"
-                    required>
-
-            </div>
-
-            <br>
+        <?php
+        require_once "../../includes/topbar.php";
+        ?>
 
 
-            <div>
+        <main class="content">
 
-                <label for="email">
-                    Email
-                </label>
 
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value="<?php
-                            echo htmlspecialchars(
-                                $employee["email"]
-                            );
-                            ?>"
-                    required>
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Edit Employee
+                    </h1>
+
+                    <p>
+                        USER MANAGEMENT // UPDATE RECORD
+                    </p>
+
+                </div>
 
             </div>
 
-            <br>
+
+            <div class="form-card">
+
+                <form
+                    action="update.php"
+                    method="post"
+                >
 
 
-            <div>
+                    <input
+                        type="hidden"
+                        name="id"
+                        value="<?php
+                            echo $employee["id"];
+                        ?>"
+                    >
 
-                <label for="username">
-                    Username
-                </label>
 
-                <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    value="<?php
-                            echo htmlspecialchars(
-                                $employee["username"]
-                            );
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            id="name"
+                            value="<?php
+                                echo htmlspecialchars(
+                                    $employee["name"]
+                                );
                             ?>"
-                    required>
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="<?php
+                                echo htmlspecialchars(
+                                    $employee["email"]
+                                );
+                            ?>"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="username"
+                            id="username"
+                            value="<?php
+                                echo htmlspecialchars(
+                                    $employee["username"]
+                                );
+                            ?>"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-primary"
+                            type="submit"
+                        >
+                            Update Employee
+                        </button>
+
+
+                        <a
+                            class="btn"
+                            href="index.php"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
+
+
+                </form>
 
             </div>
 
-            <br>
 
+        </main>
 
-            <button type="submit">
-                Update Employee
-            </button>
+    </div>
 
-        </fieldset>
-
-    </form>
-
-
-    <p>
-
-        <a href="index.php">
-            Cancel
-        </a>
-
-    </p>
+</div>
 
 </body>
 
 </html>
+

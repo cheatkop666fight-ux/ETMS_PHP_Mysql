@@ -64,138 +64,248 @@ $result = mysqli_stmt_get_result($stmt);
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>My Tasks</title>
+    <title>ETMS // My Tasks</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css"
+    >
 
 </head>
 
+
 <body>
 
-    <h1>My Tasks</h1>
+<div class="app">
 
 
-    <p>
-
-        <a href="../dashboard.php">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="../profile.php">
-            My Profile
-        </a>
-
-    </p>
+    <?php
+    require_once "../../includes/employee_sidebar.php";
+    ?>
 
 
-    <table border="1">
-
-        <thead>
-
-            <tr>
-
-                <th>Task ID</th>
-
-                <th>Title</th>
-
-                <th>Start Date</th>
-
-                <th>Due Date</th>
-
-                <th>Status</th>
-
-                <th>Priority</th>
-
-                <th>Action</th>
-
-            </tr>
-
-        </thead>
+    <div class="main">
 
 
-        <tbody>
+        <?php
+        require_once "../../includes/topbar.php";
+        ?>
 
-            <?php while ($task = mysqli_fetch_assoc($result)): ?>
 
-                <tr>
+        <main class="content">
 
-                    <td>
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        My Tasks
+                    </h1>
+
+                    <p>
+                        EMPLOYEE PORTAL // ASSIGNED TASKS
+                    </p>
+
+                </div>
+
+
+                <a
+                    class="btn"
+                    href="../dashboard.php"
+                >
+                    Dashboard
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Title</th>
+
+                            <th>Start</th>
+
+                            <th>Due</th>
+
+                            <th>Status</th>
+
+                            <th>Priority</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <?php
+                    if (mysqli_num_rows($result) === 0):
+                    ?>
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="empty-state">
+                                    You have no assigned tasks.
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    <?php
+                    else:
+                    ?>
+
                         <?php
-                        echo $task["taskId"];
+                        while (
+                            $task =
+                            mysqli_fetch_assoc($result)
+                        ):
                         ?>
-                    </td>
+
+                            <tr>
+
+                                <td>
+
+                                    #
+                                    <?php
+                                    echo $task["taskId"];
+                                    ?>
+
+                                </td>
 
 
-                    <td>
+                                <td>
+
+                                    <strong>
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $task["title"]
+                                        );
+                                        ?>
+
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $task["startDate"]
+                                    );
+                                    ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $task["dueDate"]
+                                    );
+                                    ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge badge-<?php
+                                            echo htmlspecialchars(
+                                                $task["status"]
+                                            );
+                                        ?>"
+                                    >
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $task["status"]
+                                        );
+                                        ?>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge badge-<?php
+                                            echo htmlspecialchars(
+                                                $task["priority"]
+                                            );
+                                        ?>"
+                                    >
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $task["priority"]
+                                        );
+                                        ?>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <a
+                                        class="btn"
+                                        href="view.php?id=<?php
+                                            echo $task["taskId"];
+                                        ?>"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
                         <?php
-                        echo htmlspecialchars(
-                            $task["title"]
-                        );
+                        endwhile;
                         ?>
-                    </td>
+
+                    <?php
+                    endif;
+                    ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
 
-                    <td>
-                        <?php
-                        echo htmlspecialchars(
-                            $task["startDate"]
-                        );
-                        ?>
-                    </td>
+        </main>
 
+    </div>
 
-                    <td>
-                        <?php
-                        echo htmlspecialchars(
-                            $task["dueDate"]
-                        );
-                        ?>
-                    </td>
-
-
-                    <td>
-                        <?php
-                        echo htmlspecialchars(
-                            $task["status"]
-                        );
-                        ?>
-                    </td>
-
-
-                    <td>
-                        <?php
-                        echo htmlspecialchars(
-                            $task["priority"]
-                        );
-                        ?>
-                    </td>
-
-
-                    <td>
-
-                        <a
-                            href="view.php?id=<?php echo $task["taskId"]; ?>">
-                            View
-                        </a>
-
-                    </td>
-
-                </tr>
-
-            <?php endwhile; ?>
-
-        </tbody>
-
-    </table>
+</div>
 
 </body>
 
 </html>
-
-<?php
-
-mysqli_stmt_close($stmt);
-
-?>

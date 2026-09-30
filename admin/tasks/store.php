@@ -1,6 +1,7 @@
 <?php
 require_once "../../includes/admin_auth.php";
 require_once "../../config/database.php";
+require_once "../../includes/flash.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: create.php");

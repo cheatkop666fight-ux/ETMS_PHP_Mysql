@@ -27,10 +27,8 @@ $stmt = mysqli_prepare(
 
 if (!$stmt) {
 
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
+    die("Prepare failed: " .
+        mysqli_error($conn));
 }
 
 
@@ -43,10 +41,8 @@ mysqli_stmt_bind_param(
 
 if (!mysqli_stmt_execute($stmt)) {
 
-    die(
-        "Execute failed: " .
-        mysqli_stmt_error($stmt)
-    );
+    die("Execute failed: " .
+        mysqli_stmt_error($stmt));
 }
 
 
@@ -59,6 +55,8 @@ mysqli_stmt_close($stmt);
 
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -68,110 +66,220 @@ mysqli_stmt_close($stmt);
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Employee Dashboard</title>
+    <title>ETMS // Employee Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css">
 
 </head>
 
+
 <body>
 
-    <h1>Employee Dashboard</h1>
+    <div class="app">
 
 
-    <p>
-        Welcome,
-        <strong>
+        <?php
+        require_once "../includes/employee_sidebar.php";
+        ?>
+
+
+        <div class="main">
+
+
             <?php
-            echo htmlspecialchars(
-                $_SESSION["name"]
-            );
+            require_once "../includes/topbar.php";
             ?>
-        </strong>
-    </p>
 
 
-    <nav>
-
-        <a href="dashboard.php">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="tasks/index.php">
-            My Tasks
-        </a>
-
-        |
-
-        <a href="profile.php">
-            My Profile
-        </a>
-
-        |
-
-        <a href="../login/logout.php">
-            Logout
-        </a>
-
-    </nav>
+            <main class="content">
 
 
-    <hr>
+                <div class="page-header">
+
+                    <div>
+
+                        <h1>
+                            Employee Dashboard
+                        </h1>
+
+                        <p>
+                            EMPLOYEE PORTAL // TASK OVERVIEW
+                        </p>
+
+                    </div>
 
 
-    <h2>My Task Summary</h2>
+                    <a
+                        class="btn btn-primary"
+                        href="tasks/index.php">
+                        View My Tasks
+                    </a>
+
+                </div>
 
 
-    <p>
-        Total Tasks:
-        <strong>
-            <?php
-            echo $statistics["totalTasks"] ?? 0;
-            ?>
-        </strong>
-    </p>
+                <div class="card">
+
+                    <div class="card-title">
+                        Current User
+                    </div>
+
+                    <p>
+
+                        Welcome,
+
+                        <strong>
+
+                            <?php
+                            echo htmlspecialchars(
+                                $_SESSION["name"]
+                            );
+                            ?>
+
+                        </strong>
+
+                    </p>
+
+                </div>
 
 
-    <p>
-        Incomplete:
-        <strong>
-            <?php
-            echo $statistics["incompleteTasks"] ?? 0;
-            ?>
-        </strong>
-    </p>
+                <br>
 
 
-    <p>
-        Progressing:
-        <strong>
-            <?php
-            echo $statistics["progressingTasks"] ?? 0;
-            ?>
-        </strong>
-    </p>
+                <div class="page-header">
+
+                    <div>
+
+                        <h1>
+                            My Task Summary
+                        </h1>
+
+                        <p>
+                            CURRENT TASK STATISTICS
+                        </p>
+
+                    </div>
+
+                </div>
 
 
-    <p>
-        Completed:
-        <strong>
-            <?php
-            echo $statistics["completedTasks"] ?? 0;
-            ?>
-        </strong>
-    </p>
+                <div class="cards">
 
 
-    <p>
+                    <div class="card">
 
-        <a href="tasks/index.php">
-            View My Tasks
-        </a>
+                        <div class="card-title">
+                            Total Tasks
+                        </div>
 
-    </p>
+                        <div class="card-value">
+
+                            <?php
+                            echo $statistics["totalTasks"] ?? 0;
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            Incomplete
+                        </div>
+
+                        <div class="card-value">
+
+                            <?php
+                            echo $statistics["incompleteTasks"] ?? 0;
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            Progressing
+                        </div>
+
+                        <div class="card-value">
+
+                            <?php
+                            echo $statistics["progressingTasks"] ?? 0;
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            Completed
+                        </div>
+
+                        <div class="card-value">
+
+                            <?php
+                            echo $statistics["completedTasks"] ?? 0;
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Quick Actions
+                    </div>
+
+
+                    <div class="actions">
+
+                        <a
+                            class="btn btn-primary"
+                            href="tasks/index.php">
+                            My Tasks
+                        </a>
+
+
+                        <a
+                            class="btn"
+                            href="profile.php">
+                            My Profile
+                        </a>
+
+
+                        <a
+                            class="btn btn-danger"
+                            href="../auth/logout.php">
+                            Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </main>
+
+        </div>
+
+    </div>
 
 </body>
 

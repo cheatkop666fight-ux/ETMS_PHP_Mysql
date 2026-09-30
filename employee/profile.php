@@ -23,10 +23,8 @@ $stmt = mysqli_prepare(
 
 if (!$stmt) {
 
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
+    die("Prepare failed: " .
+        mysqli_error($conn));
 }
 
 
@@ -39,10 +37,8 @@ mysqli_stmt_bind_param(
 
 if (!mysqli_stmt_execute($stmt)) {
 
-    die(
-        "Execute failed: " .
-        mysqli_stmt_error($stmt)
-    );
+    die("Execute failed: " .
+        mysqli_stmt_error($stmt));
 }
 
 
@@ -70,103 +66,158 @@ if (!$user) {
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
-    <title>My Profile</title>
+    <title>ETMS // My Profile</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css">
 
 </head>
 
+
 <body>
 
-    <h1>My Profile</h1>
+    <div class="app">
 
 
-    <p>
-
-        <a href="dashboard.php">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="tasks/index.php">
-            My Tasks
-        </a>
-
-    </p>
+        <?php
+        require_once "../includes/employee_sidebar.php";
+        ?>
 
 
-    <fieldset>
+        <div class="main">
 
-        <legend>
-            Personal Information
-        </legend>
-
-
-        <p>
-
-            <strong>ID:</strong>
 
             <?php
-            echo $user["id"];
+            require_once "../includes/topbar.php";
             ?>
 
-        </p>
+
+            <main class="content">
 
 
-        <p>
+                <div class="page-header">
 
-            <strong>Name:</strong>
+                    <div>
 
-            <?php
-            echo htmlspecialchars(
-                $user["name"]
-            );
-            ?>
+                        <h1>
+                            My Profile
+                        </h1>
 
-        </p>
+                        <p>
+                            EMPLOYEE PORTAL // ACCOUNT INFORMATION
+                        </p>
 
+                    </div>
 
-        <p>
-
-            <strong>Email:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $user["email"]
-            );
-            ?>
-
-        </p>
+                </div>
 
 
-        <p>
-
-            <strong>Username:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $user["username"]
-            );
-            ?>
-
-        </p>
+                <div class="detail-grid">
 
 
-        <p>
+                    <div class="detail-item">
 
-            <strong>Account Created:</strong>
+                        <div class="detail-label">
+                            Name
+                        </div>
 
-            <?php
-            echo htmlspecialchars(
-                $user["createdAt"]
-            );
-            ?>
+                        <div class="detail-value">
 
-        </p>
+                            <?php
+                            echo htmlspecialchars(
+                                $user["name"]
+                            );
+                            ?>
 
-    </fieldset>
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Username
+                        </div>
+
+                        <div class="detail-value">
+
+                            <?php
+                            echo htmlspecialchars(
+                                $user["username"]
+                            );
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Email
+                        </div>
+
+                        <div class="detail-value">
+
+                            <?php
+                            echo htmlspecialchars(
+                                $user["email"]
+                            );
+                            ?>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Role
+                        </div>
+
+                        <div class="detail-value">
+
+                            <span class="badge badge-completed">
+                                EMPLOYEE
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="actions">
+
+                    <a
+                        class="btn btn-primary"
+                        href="dashboard.php">
+                        Back To Dashboard
+                    </a>
+
+
+                    <a
+                        class="btn btn-danger"
+                        href="../login/logout.php">
+                        Logout
+                    </a>
+
+                </div>
+
+
+            </main>
+
+        </div>
+
+    </div>
 
 </body>
 

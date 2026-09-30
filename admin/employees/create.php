@@ -6,40 +6,188 @@ require_once "../../includes/admin_auth.php"
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ETMS // Add Employee</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css"
+    >
+
 </head>
 
+
 <body>
-    <h1>Add Employee</h1>
-    <form action="store.php" method="post">
-        <fieldset>
-            <legend>Form</legend>
-            <div>
-                <label for="name">Name</label>
-                <input type="text" name="name" id="name" required>
-            </div><br>
-            <div>
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required>
-            </div><br>
-            <div>
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" required>
-            </div><br>
-            <div>
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" required>
-            </div><br>
-            <div>
-                <label for="conpassword">Confirm Password</label>
-                <input type="password" name="conpassword" id="conpassword" required>
-            </div><br>
-            <button type="submit">Create Employee</button>
-        </fieldset>
-    </form>
-    <p><a href="index.php">Back to Employees</a></p>
+
+<div class="app">
+
+
+    <?php
+    require_once "../../includes/admin_sidebar.php";
+    ?>
+
+
+    <div class="main">
+
+
+        <?php
+        require_once "../../includes/topbar.php";
+        ?>
+
+
+        <main class="content">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Add Employee
+                    </h1>
+
+                    <p>
+                        USER MANAGEMENT // CREATE RECORD
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-card">
+
+                <form
+                    action="store.php"
+                    method="post"
+                >
+
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            id="name"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="email"
+                            name="email"
+                            id="email"
+                            maxlength="150"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="username"
+                            id="username"
+                            maxlength="50"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="password"
+                            name="password"
+                            id="password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="confirm_password">
+                            Confirm Password
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="password"
+                            name="confirm_password"
+                            id="confirm_password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-primary"
+                            type="submit"
+                        >
+                            Create Employee
+                        </button>
+
+
+                        <a
+                            class="btn"
+                            href="index.php"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
 
 </body>
 

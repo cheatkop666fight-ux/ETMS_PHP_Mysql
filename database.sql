@@ -38,15 +38,19 @@ CREATE TABLE tasks (
 -- -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 -- ATTENDANCE
 -- -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CREATE TABLE attendances(
-    attenId INT AUTO_INCREMENT PRIMARY KEY, 
-    userId INT NOT NULL , 
-    workDate DATE NOT NULL, 
-    checkIn DATETIME NOT NULL, 
-    checkOut DATETIME NOT NULL, 
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    CONSTRAINT fk_attendance_user 
-        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+CREATE TABLE attendances (
+    attenId INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL,
+    workDate DATE NOT NULL,
+    checkIn DATETIME NOT NULL,
+    checkOut DATETIME NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_attendance_user
+        FOREIGN KEY (userId)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
     UNIQUE KEY uniqueUserDate (userId, workDate)
 );
 

@@ -22,55 +22,244 @@ if (!$result) {
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employees</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ETMS // Employees</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css"
+    >
+
 </head>
 
+
 <body>
-    <h1>Employees</h1>
-    <p>
-        <a href="../dashboard.php">Dashboard</a>|
-        <a href="create.php">Add Employee</a>
-    </p>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>USERNAME</th>
-                <th>CREATED</th>
-                <th>ACTIONS</th>
-            </tr>
-        </thead>
 
-        <Tbody>
-            <?php while ($employee = mysqli_fetch_assoc($result)): ?>
-                <tr>
-                    <td><?php echo $employee["id"] ?></td>
-                    <td><?php echo htmlspecialchars($employee["name"]) ?></td>
-                    <td><?php echo htmlspecialchars($employee["email"]) ?></td>
-                    <td><?php echo htmlspecialchars($employee["username"]) ?></td>
-                    <td><?php echo htmlspecialchars($employee["createdAt"]) ?></td>
-                    <td>
-                        <a href="./edit.php?id=<?php echo $employee["id"]; ?>">Edit</a>|
-                        <a href="./view.php?id=<?php echo $employee["id"]; ?>">View</a>|
-                        <form action="delete.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this employee?');">
-                            <input type="hidden" name="id" value="<?php echo $employee["id"]; ?>">
+<div class="app">
 
-                            <button type="submit">
-                                Delete
-                            </button>
 
-                        </form>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        </Tbody>
-    </table>
+    <?php
+    require_once "../../includes/admin_sidebar.php";
+    ?>
 
+
+    <div class="main">
+
+
+        <?php
+        require_once "../../includes/topbar.php";
+        ?>
+
+
+        <main class="content">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Employees
+                    </h1>
+
+                    <p>
+                        USER MANAGEMENT // EMPLOYEE RECORDS
+                    </p>
+
+                </div>
+
+
+                <a
+                    class="btn btn-primary"
+                    href="create.php"
+                >
+                    + Add Employee
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Username</th>
+
+                            <th>Role</th>
+
+                            <th>Created</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <?php
+                    if (mysqli_num_rows($result) === 0):
+                    ?>
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="empty-state">
+                                    No employees found.
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    <?php
+                    else:
+                    ?>
+
+                        <?php
+                        while (
+                            $employee =
+                            mysqli_fetch_assoc($result)
+                        ):
+                        ?>
+
+                            <tr>
+
+                                <td>
+                                    #
+                                    <?php
+                                    echo $employee["id"];
+                                    ?>
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $employee["name"]
+                                        );
+                                        ?>
+
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $employee["email"]
+                                    );
+                                    ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $employee["username"]
+                                    );
+                                    ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="badge badge-completed">
+                                        EMPLOYEE
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $employee["createdAt"]
+                                    );
+                                    ?>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="actions">
+
+                                        <a
+                                            class="btn btn-primary"
+                                            href="edit.php?id=<?php
+                                                echo $employee["id"];
+                                            ?>"
+                                        >
+                                            Edit
+                                        </a>
+
+
+                                        <a
+                                            class="btn btn-danger"
+                                            href="delete.php?id=<?php
+                                                echo $employee["id"];
+                                            ?>"
+                                        >
+                                            Delete
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        <?php
+                        endwhile;
+                        ?>
+
+                    <?php
+                    endif;
+                    ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
 
 </body>
 
 </html>
+

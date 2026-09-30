@@ -43,10 +43,8 @@ $stmt = mysqli_prepare(
 
 if (!$stmt) {
 
-    die(
-        "Prepare failed: " .
-        mysqli_error($conn)
-    );
+    die("Prepare failed: " .
+        mysqli_error($conn));
 }
 
 
@@ -59,10 +57,8 @@ mysqli_stmt_bind_param(
 
 if (!mysqli_stmt_execute($stmt)) {
 
-    die(
-        "Execute failed: " .
-        mysqli_stmt_error($stmt)
-    );
+    die("Execute failed: " .
+        mysqli_stmt_error($stmt));
 }
 
 
@@ -99,10 +95,8 @@ $employees = mysqli_query($conn, $sql);
 
 if (!$employees) {
 
-    die(
-        "Employee query failed: " .
-        mysqli_error($conn)
-    );
+    die("Employee query failed: " .
+        mysqli_error($conn));
 }
 
 ?>
@@ -116,302 +110,351 @@ if (!$employees) {
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Edit Task</title>
+    <title>ETMS // Edit Task</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css">
 
 </head>
 
+
 <body>
 
-    <h1>Edit Task</h1>
+    <div class="app">
 
 
-    <form action="update.php" method="post">
+        <?php
+        require_once "../../includes/admin_sidebar.php";
+        ?>
 
-        <fieldset>
 
-            <legend>Task Information</legend>
+        <div class="main">
 
 
-            <!-- Task ID -->
+            <?php
+            require_once "../../includes/topbar.php";
+            ?>
 
-            <input
-                type="hidden"
-                name="taskId"
-                value="<?php echo $task["taskId"]; ?>"
-            >
 
+            <main class="content">
 
-            <!-- Title -->
 
-            <div>
+                <div class="page-header">
 
-                <label for="title">
-                    Title
-                </label>
+                    <div>
 
-                <input
-                    type="text"
-                    name="title"
-                    id="title"
-                    maxlength="150"
-                    value="<?php echo htmlspecialchars($task["title"]); ?>"
-                    required
-                >
+                        <h1>
+                            Edit Task
+                        </h1>
 
-            </div>
+                        <p>
+                            TASK MANAGEMENT // UPDATE RECORD
+                        </p>
 
-            <br>
+                    </div>
 
+                </div>
 
-            <!-- Description -->
 
-            <div>
+                <div class="form-card">
 
-                <label for="description">
-                    Description
-                </label>
+                    <form
+                        action="update.php"
+                        method="post">
 
-                <br>
 
-                <textarea
-                    name="description"
-                    id="description"
-                    cols="50"
-                    rows="6"
-                ><?php
-                    echo htmlspecialchars(
-                        $task["description"]
-                    );
-                ?></textarea>
+                        <input
+                            type="hidden"
+                            name="taskId"
+                            value="<?php
+                                    echo $task["taskId"];
+                                    ?>">
 
-            </div>
 
-            <br>
+                        <div class="form-group">
 
+                            <label for="title">
+                                Task Title
+                            </label>
 
-            <!-- Employee -->
+                            <input
+                                class="form-control"
+                                type="text"
+                                name="title"
+                                id="title"
+                                value="<?php
+                                        echo htmlspecialchars(
+                                            $task["title"]
+                                        );
+                                        ?>"
+                                required>
 
-            <div>
+                        </div>
 
-                <label for="assignedTo">
-                    Assign To
-                </label>
 
-                <select
-                    name="assignedTo"
-                    id="assignedTo"
-                    required
-                >
+                        <div class="form-group">
 
-                    <?php while ($employee = mysqli_fetch_assoc($employees)): ?>
+                            <label for="description">
+                                Description
+                            </label>
 
-                        <option
-                            value="<?php echo $employee["id"]; ?>"
-                            <?php
-                            if (
-                                $employee["id"] == $task["assignedTo"]
-                            ) {
-                                echo "selected";
-                            }
-                            ?>
-                        >
+                            <textarea
+                                class="form-control"
+                                name="description"
+                                id="description"><?php
+                                                    echo htmlspecialchars(
+                                                        $task["description"] ?? ""
+                                                    );
+                                                    ?></textarea>
 
-                            <?php
-                            echo htmlspecialchars(
-                                $employee["name"]
-                            );
-                            ?>
+                        </div>
 
-                        </option>
 
-                    <?php endwhile; ?>
+                        <div class="form-group">
 
-                </select>
+                            <label for="assignedTo">
+                                Assign To
+                            </label>
 
-            </div>
-
-            <br>
-
-
-            <!-- Start Date -->
-
-            <div>
-
-                <label for="startDate">
-                    Start Date
-                </label>
-
-                <input
-                    type="datetime-local"
-                    name="startDate"
-                    id="startDate"
-                    value="<?php echo date(
-                        "Y-m-d\TH:i",
-                        strtotime($task["startDate"])
-                    ); ?>"
-                    required
-                >
-
-            </div>
-
-            <br>
-
-
-            <!-- Due Date -->
-
-            <div>
-
-                <label for="dueDate">
-                    Due Date
-                </label>
-
-                <input
-                    type="datetime-local"
-                    name="dueDate"
-                    id="dueDate"
-                    value="<?php echo date(
-                        "Y-m-d\TH:i",
-                        strtotime($task["dueDate"])
-                    ); ?>"
-                    required
-                >
-
-            </div>
-
-            <br>
-
-
-            <!-- Priority -->
-
-            <div>
-
-                <label for="priority">
-                    Priority
-                </label>
-
-                <select
-                    name="priority"
-                    id="priority"
-                    required
-                >
-
-                    <option
-                        value="low"
-                        <?php
-                        echo $task["priority"] === "low"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        Low
-                    </option>
-
-
-                    <option
-                        value="medium"
-                        <?php
-                        echo $task["priority"] === "medium"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        Medium
-                    </option>
-
-
-                    <option
-                        value="high"
-                        <?php
-                        echo $task["priority"] === "high"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        High
-                    </option>
-
-                </select>
-
-            </div>
-
-            <br>
-
-
-            <!-- Status -->
-
-            <div>
-
-                <label for="status">
-                    Status
-                </label>
-
-                <select
-                    name="status"
-                    id="status"
-                    required
-                >
-
-                    <option
-                        value="incomplete"
-                        <?php
-                        echo $task["status"] === "incomplete"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        Incomplete
-                    </option>
-
-
-                    <option
-                        value="progressing"
-                        <?php
-                        echo $task["status"] === "progressing"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        Progressing
-                    </option>
-
-
-                    <option
-                        value="completed"
-                        <?php
-                        echo $task["status"] === "completed"
-                            ? "selected"
-                            : "";
-                        ?>
-                    >
-                        Completed
-                    </option>
-
-                </select>
-
-            </div>
-
-            <br>
-
-
-            <button type="submit">
-                Update Task
-            </button>
-
-        </fieldset>
-
-    </form>
-
-
-    <p>
-
-        <a href="index.php">
-            Cancel
-        </a>
-
-    </p>
+                            <select
+                                class="form-control"
+                                name="assignedTo"
+                                id="assignedTo"
+                                required>
+
+                                <?php
+                                while (
+                                    $employee =
+                                    mysqli_fetch_assoc($result)
+                                ):
+                                ?>
+
+                                    <option
+                                        value="<?php
+                                                echo $employee["id"];
+                                                ?>"
+                                        <?php
+                                        if (
+                                            $employee["id"]
+                                            ==
+                                            $task["assignedTo"]
+                                        ) {
+                                            echo "selected";
+                                        }
+                                        ?>>
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $employee["name"]
+                                        );
+                                        ?>
+
+                                    </option>
+
+                                <?php
+                                endwhile;
+                                ?>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="startDate">
+                                Start Date
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="datetime-local"
+                                name="startDate"
+                                id="startDate"
+                                value="<?php
+                                        echo date(
+                                            "Y-m-d\TH:i",
+                                            strtotime(
+                                                $task["startDate"]
+                                            )
+                                        );
+                                        ?>"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="dueDate">
+                                Due Date
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="datetime-local"
+                                name="dueDate"
+                                id="dueDate"
+                                value="<?php
+                                        echo date(
+                                            "Y-m-d\TH:i",
+                                            strtotime(
+                                                $task["dueDate"]
+                                            )
+                                        );
+                                        ?>"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status
+                            </label>
+
+                            <select
+                                class="form-control"
+                                name="status"
+                                id="status"
+                                required>
+
+                                <option
+                                    value="incomplete"
+                                    <?php
+                                    if (
+                                        $task["status"]
+                                        === "incomplete"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    INCOMPLETE
+                                </option>
+
+
+                                <option
+                                    value="progressing"
+                                    <?php
+                                    if (
+                                        $task["status"]
+                                        === "progressing"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    PROGRESSING
+                                </option>
+
+
+                                <option
+                                    value="completed"
+                                    <?php
+                                    if (
+                                        $task["status"]
+                                        === "completed"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    COMPLETED
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="priority">
+                                Priority
+                            </label>
+
+                            <select
+                                class="form-control"
+                                name="priority"
+                                id="priority"
+                                required>
+
+                                <option
+                                    value="low"
+                                    <?php
+                                    if (
+                                        $task["priority"]
+                                        === "low"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    LOW
+                                </option>
+
+
+                                <option
+                                    value="medium"
+                                    <?php
+                                    if (
+                                        $task["priority"]
+                                        === "medium"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    MEDIUM
+                                </option>
+
+
+                                <option
+                                    value="high"
+                                    <?php
+                                    if (
+                                        $task["priority"]
+                                        === "high"
+                                    ) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+                                    HIGH
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit">
+                                Update Task
+                            </button>
+
+
+                            <a
+                                class="btn"
+                                href="index.php">
+                                Cancel
+                            </a>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+
+            </main>
+
+        </div>
+
+    </div>
 
 </body>
 

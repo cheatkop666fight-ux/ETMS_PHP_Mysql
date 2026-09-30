@@ -3,6 +3,7 @@
 require_once "../../includes/employee_auth.php";
 require_once "../../config/database.php";
 require_once "../../includes/csrf.php";
+require_once "../../includes/flash.php";
 
 
 $userId = $_SESSION["user_id"];
@@ -19,13 +20,6 @@ if (
 
 $taskId = (int) $_GET["id"];
 
-
-/*
-|--------------------------------------------------------------------------
-| IMPORTANT:
-| Check BOTH taskId AND assignedTo
-|--------------------------------------------------------------------------
-*/
 
 $stmt = mysqli_prepare(
     $conn,
@@ -81,6 +75,9 @@ if (!$task) {
     die("Task not found.");
 }
 
+
+$flash = get_flash();
+
 ?>
 
 <!DOCTYPE html>
@@ -94,209 +91,488 @@ if (!$task) {
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>View My Task</title>
+    <title>
+        ETMS // View Task
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css">
 
 </head>
 
+
 <body>
 
-    <h1>Task Details</h1>
+    <div class="app">
 
 
-    <p>
+        <?php require_once "../../includes/employee_sidebar.php"; ?>
 
-        <a href="index.php">
-            Back to My Tasks
-        </a>
 
-    </p>
+        <div class="main">
 
 
-    <fieldset>
+            <?php require_once "../../includes/topbar.php"; ?>
 
-        <legend>
-            Task Information
-        </legend>
 
+            <main class="content">
 
-        <p>
 
-            <strong>Task ID:</strong>
+                <?php if ($flash): ?>
 
-            <?php
-            echo $task["taskId"];
-            ?>
+                    <div
+                        class="flash flash-<?php echo htmlspecialchars($flash["type"]); ?>">
 
-        </p>
+                        <?php
+                        echo htmlspecialchars(
+                            $flash["message"]
+                        );
+                        ?>
 
+                    </div>
 
-        <p>
+                <?php endif; ?>
 
-            <strong>Title:</strong>
 
-            <?php
-            echo htmlspecialchars(
-                $task["title"]
-            );
-            ?>
+                <!-- PAGE HEADER -->
 
-        </p>
+                <div class="page-header">
 
+                    <div>
 
-        <p>
+                        <h1>
+                            Task Details
+                        </h1>
 
-            <strong>Description:</strong>
+                        <p>
+                            EMPLOYEE PORTAL // TASK INFORMATION
+                        </p>
 
-            <br>
+                    </div>
 
-            <?php
-            echo nl2br(
-                htmlspecialchars(
-                    $task["description"]
-                )
-            );
-            ?>
 
-        </p>
+                    <a
+                        href="index.php"
+                        class="btn">
 
+                        ← Back To My Tasks
 
-        <p>
+                    </a>
 
-            <strong>Start Date:</strong>
+                </div>
 
-            <?php
-            echo htmlspecialchars(
-                $task["startDate"]
-            );
-            ?>
 
-        </p>
+                <!-- TASK HEADER -->
 
+                <section class="task-detail-header">
 
-        <p>
+                    <div>
 
-            <strong>Due Date:</strong>
+                        <div class="task-id">
 
-            <?php
-            echo htmlspecialchars(
-                $task["dueDate"]
-            );
-            ?>
+                            TASK #
+                            <?php
+                            echo htmlspecialchars(
+                                $task["taskId"]
+                            );
+                            ?>
 
-        </p>
+                        </div>
 
 
-        <p>
+                        <h2>
 
-            <strong>Status:</strong>
+                            <?php
+                            echo htmlspecialchars(
+                                $task["title"]
+                            );
+                            ?>
 
-            <?php
-            echo htmlspecialchars(
-                $task["status"]
-            );
-            ?>
+                        </h2>
 
-        </p>
+                    </div>
 
 
-        <p>
+                    <div class="task-badges">
 
-            <strong>Priority:</strong>
+                        <span
+                            class="badge badge-<?php
+                                                echo htmlspecialchars(
+                                                    $task["status"]
+                                                );
+                                                ?>">
 
-            <?php
-            echo htmlspecialchars(
-                $task["priority"]
-            );
-            ?>
+                            <?php
+                            echo strtoupper(
+                                htmlspecialchars(
+                                    $task["status"]
+                                )
+                            );
+                            ?>
 
-        </p>
+                        </span>
 
 
-        <p>
+                        <span
+                            class="badge badge-<?php
+                                                echo htmlspecialchars(
+                                                    $task["priority"]
+                                                );
+                                                ?>">
 
-            <strong>Created At:</strong>
+                            <?php
+                            echo strtoupper(
+                                htmlspecialchars(
+                                    $task["priority"]
+                                )
+                            );
+                            ?>
 
-            <?php
-            echo htmlspecialchars(
-                $task["createdAt"]
-            );
-            ?>
+                        </span>
 
-        </p>
+                    </div>
 
+                </section>
 
-    </fieldset>
 
+                <!-- TASK INFORMATION -->
 
-    <p>
+                <section class="panel">
 
-        <a href="view.php?id=<?php echo $task["taskId"]; ?>">
-            Refresh
-        </a>
+                    <div class="panel-header">
 
-    </p>
+                        <div>
 
-    <h2>Update Status</h2>
+                            <h2>
+                                Task Information
+                            </h2>
 
-    <form action="update_status.php" method="post">
+                            <p>
+                                DETAILS AND SCHEDULE
+                            </p>
 
-        <input
-            type="hidden"
-            name="taskId"
-            value="<?php echo $task["taskId"]; ?>">
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="<?php echo htmlspecialchars(csrf_token()); ?>">
+                        </div>
 
-        <label for="status">
-            Status
-        </label>
+                    </div>
 
-        <select
-            name="status"
-            id="status"
-            required>
 
-            <option
-                value="incomplete"
-                <?php
-                echo $task["status"] === "incomplete"
-                    ? "selected"
-                    : "";
-                ?>>
-                Incomplete
-            </option>
+                    <div class="detail-grid">
 
 
-            <option
-                value="progressing"
-                <?php
-                echo $task["status"] === "progressing"
-                    ? "selected"
-                    : "";
-                ?>>
-                Progressing
-            </option>
+                        <div class="detail-item">
 
+                            <div class="detail-label">
+                                TASK ID
+                            </div>
 
-            <option
-                value="completed"
-                <?php
-                echo $task["status"] === "completed"
-                    ? "selected"
-                    : "";
-                ?>>
-                Completed
-            </option>
+                            <div class="detail-value">
 
-        </select>
+                                #
+                                <?php
+                                echo htmlspecialchars(
+                                    $task["taskId"]
+                                );
+                                ?>
 
-        <button type="submit">
-            Update Status
-        </button>
+                            </div>
 
-    </form>
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                TITLE
+                            </div>
+
+                            <div class="detail-value">
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $task["title"]
+                                );
+                                ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                START DATE
+                            </div>
+
+                            <div class="detail-value">
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $task["startDate"]
+                                );
+                                ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                DUE DATE
+                            </div>
+
+                            <div class="detail-value">
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $task["dueDate"]
+                                );
+                                ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                CREATED AT
+                            </div>
+
+                            <div class="detail-value">
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $task["createdAt"]
+                                );
+                                ?>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                PRIORITY
+                            </div>
+
+                            <div class="detail-value">
+
+                                <span
+                                    class="badge badge-<?php
+                                                        echo htmlspecialchars(
+                                                            $task["priority"]
+                                                        );
+                                                        ?>">
+
+                                    <?php
+                                    echo strtoupper(
+                                        htmlspecialchars(
+                                            $task["priority"]
+                                        )
+                                    );
+                                    ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+                <!-- DESCRIPTION -->
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Description
+                            </h2>
+
+                            <p>
+                                TASK INSTRUCTIONS
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="task-description">
+
+                        <?php
+
+                        if (
+                            $task["description"] !== null &&
+                            $task["description"] !== ""
+                        ) {
+
+                            echo nl2br(
+                                htmlspecialchars(
+                                    $task["description"]
+                                )
+                            );
+                        } else {
+
+                            echo "No description provided.";
+                        }
+
+                        ?>
+
+                    </div>
+
+                </section>
+
+
+                <!-- UPDATE STATUS -->
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Update Status
+                            </h2>
+
+                            <p>
+                                CHANGE YOUR TASK PROGRESS
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form
+                        action="update_status.php"
+                        method="post"
+                        class="form-card">
+
+
+                        <input
+                            type="hidden"
+                            name="taskId"
+                            value="<?php
+                                    echo htmlspecialchars(
+                                        $task["taskId"]
+                                    );
+                                    ?>">
+
+
+                        <?php csrf_field(); ?>
+
+
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status
+                            </label>
+
+
+                            <select
+                                name="status"
+                                id="status"
+                                class="form-control"
+                                required>
+
+
+                                <option
+                                    value="incomplete"
+                                    <?php
+
+                                    echo $task["status"] === "incomplete"
+                                        ? "selected"
+                                        : "";
+
+                                    ?>>
+
+                                    Incomplete
+
+                                </option>
+
+
+                                <option
+                                    value="progressing"
+                                    <?php
+
+                                    echo $task["status"] === "progressing"
+                                        ? "selected"
+                                        : "";
+
+                                    ?>>
+
+                                    Progressing
+
+                                </option>
+
+
+                                <option
+                                    value="completed"
+                                    <?php
+
+                                    echo $task["status"] === "completed"
+                                        ? "selected"
+                                        : "";
+
+                                    ?>>
+
+                                    Completed
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+
+                                UPDATE STATUS
+
+                            </button>
+
+
+                            <a
+                                href="index.php"
+                                class="btn">
+
+                                CANCEL
+
+                            </a>
+
+                        </div>
+
+
+                    </form>
+
+                </section>
+
+
+            </main>
+
+        </div>
+
+    </div>
 
 </body>
 

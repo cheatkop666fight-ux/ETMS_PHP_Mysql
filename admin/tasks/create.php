@@ -20,75 +20,267 @@ if (!$result) {
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Task</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ETMS // Create Task</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css">
+
 </head>
 
+
 <body>
-    <h1>Create Task</h1>
 
-    <form action="store.php" method="post">
-        <fieldset>
-            <legend>Task Information</legend>
+    <div class="app">
 
-            <div>
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" maxlength="150" required>
-            </div><br>
 
-            <div>
-                <label for="description">Description</label><br>
-                <textarea name="description" id="description" cols="50" rows="6"></textarea>
-            </div><br>
+        <?php
+        require_once "../../includes/admin_sidebar.php";
+        ?>
 
-            <div>
-                <label for="assignedTo">Assign To</label>
-                <select name="assignedTo" id="assignedTo" required>
-                    <option value="">-- Select Employee --</option>
-                    <?php while ($employee = mysqli_fetch_assoc($result)): ?>
 
-                        <option value=" <?php echo $employee["id"]; ?> ">
-                            <?php echo htmlspecialchars($employee["name"]) ?>
-                        </option>
+        <div class="main">
 
-                    <?php endwhile; ?>
 
-                </select>
-            </div><br>
+            <?php
+            require_once "../../includes/topbar.php";
+            ?>
 
-            <div>
-                <label for="startDate">Start Date</label>
-                <input type="datetime-local" name="startDate" id="startDate" required>
-            </div>
-            <br>
-            <div>
-                <label for="dueDate">Due Date</label>
-                <input type="datetime-local" name="dueDate" id="dueDate" required>
-            </div>
-            <br>
 
-            <div>
-                <label for="priority">Priority</label>
-                <select name="priority" id="priority" required>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </div><br>
+            <main class="content">
 
-            <div>
-                <label for="status">Status</label>
-                <select name="status" id="status" required>
-                    <option value="incomplete">Incomplete</option>
-                    <option value="progressing">progressing</option>
-                    <option value="completed">Completed</option>
-                </select>
-            </div><br>
-            <button type="submit">Create Task</button>
-        </fieldset>
-    </form>
-    <p><a href="index.php">Cancel</a></p>
+
+                <div class="page-header">
+
+                    <div>
+
+                        <h1>
+                            Create Task
+                        </h1>
+
+                        <p>
+                            TASK MANAGEMENT // NEW RECORD
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card">
+
+                    <form
+                        action="store.php"
+                        method="post">
+
+
+                        <div class="form-group">
+
+                            <label for="title">
+                                Task Title
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="text"
+                                name="title"
+                                id="title"
+                                maxlength="150"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="description">
+                                Description
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                name="description"
+                                id="description"></textarea>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="assignedTo">
+                                Assign To
+                            </label>
+
+                            <select
+                                class="form-control"
+                                name="assignedTo"
+                                id="assignedTo"
+                                required>
+
+                                <option value="">
+                                    -- SELECT EMPLOYEE --
+                                </option>
+
+
+                                <?php
+                                while (
+                                    $employee =
+                                    mysqli_fetch_assoc($result)
+                                ):
+                                ?>
+
+                                    <option
+                                        value="<?php
+                                                echo $employee["id"];
+                                                ?>">
+
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $employee["name"]
+                                        );
+                                        ?>
+
+                                    </option>
+
+                                <?php
+                                endwhile;
+                                ?>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="startDate">
+                                Start Date
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="datetime-local"
+                                name="startDate"
+                                id="startDate"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="dueDate">
+                                Due Date
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="datetime-local"
+                                name="dueDate"
+                                id="dueDate"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="priority">
+                                Priority
+                            </label>
+
+                            <select
+                                class="form-control"
+                                name="priority"
+                                id="priority"
+                                required>
+
+                                <option value="low">
+                                    LOW
+                                </option>
+
+                                <option
+                                    value="medium"
+                                    selected>
+                                    MEDIUM
+                                </option>
+
+                                <option value="high">
+                                    HIGH
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status
+                            </label>
+
+                            <select
+                                class="form-control"
+                                name="status"
+                                id="status"
+                                required>
+
+                                <option
+                                    value="incomplete"
+                                    selected>
+                                    INCOMPLETE
+                                </option>
+
+                                <option value="progressing">
+                                    PROGRESSING
+                                </option>
+
+                                <option value="completed">
+                                    COMPLETED
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit">
+                                Create Task
+                            </button>
+
+
+                            <a
+                                class="btn"
+                                href="index.php">
+                                Cancel
+                            </a>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+
+            </main>
+
+        </div>
+
+    </div>
+
 </body>
 
 </html>

@@ -122,147 +122,249 @@ if (!$task) {
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>View Task</title>
+    <title>ETMS // View Task</title>
+
+    <link
+        rel="stylesheet"
+        href="/ETMS/assets/css/style.css"
+    >
 
 </head>
 
+
 <body>
 
-    <h1>Task Details</h1>
+<div class="app">
 
 
-    <p>
-
-        <a href="index.php">
-            Back to Tasks
-        </a>
-
-        |
-
-        <a href="edit.php?id=<?php echo $task["taskId"]; ?>">
-            Edit Task
-        </a>
-
-    </p>
+    <?php
+    require_once "../../includes/admin_sidebar.php";
+    ?>
 
 
-    <fieldset>
-
-        <legend>Task Information</legend>
+    <div class="main">
 
 
-        <p>
-            <strong>Task ID:</strong>
-
-            <?php
-            echo $task["taskId"];
-            ?>
-        </p>
+        <?php
+        require_once "../../includes/topbar.php";
+        ?>
 
 
-        <p>
-            <strong>Title:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $task["title"]
-            );
-            ?>
-        </p>
+        <main class="content">
 
 
-        <p>
-            <strong>Description:</strong>
+            <div class="page-header">
 
-            <?php
-            echo nl2br(
-                htmlspecialchars(
-                    $task["description"]
-                )
-            );
-            ?>
-        </p>
+                <div>
 
+                    <h1>
+                        Task #<?php
+                        echo $task["taskId"];
+                        ?>
+                    </h1>
 
-        <p>
-            <strong>Assigned Employee:</strong>
+                    <p>
+                        TASK MANAGEMENT // DETAILS
+                    </p>
 
-            <?php
-            echo htmlspecialchars(
-                $task["employeeName"]
-            );
-            ?>
-        </p>
+                </div>
 
 
-        <p>
-            <strong>Employee Email:</strong>
+                <div class="actions">
 
-            <?php
-            echo htmlspecialchars(
-                $task["employeeEmail"]
-            );
-            ?>
-        </p>
-
-
-        <p>
-            <strong>Start Date:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $task["startDate"]
-            );
-            ?>
-        </p>
+                    <a
+                        class="btn btn-primary"
+                        href="edit.php?id=<?php
+                            echo $task["taskId"];
+                        ?>"
+                    >
+                        Edit
+                    </a>
 
 
-        <p>
-            <strong>Due Date:</strong>
+                    <a
+                        class="btn"
+                        href="index.php"
+                    >
+                        Back
+                    </a>
 
-            <?php
-            echo htmlspecialchars(
-                $task["dueDate"]
-            );
-            ?>
-        </p>
+                </div>
 
-
-        <p>
-            <strong>Status:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $task["status"]
-            );
-            ?>
-        </p>
+            </div>
 
 
-        <p>
-            <strong>Priority:</strong>
-
-            <?php
-            echo htmlspecialchars(
-                $task["priority"]
-            );
-            ?>
-        </p>
+            <div class="detail-grid">
 
 
-        <p>
-            <strong>Created At:</strong>
+                <div class="detail-item">
 
-            <?php
-            echo htmlspecialchars(
-                $task["createdAt"]
-            );
-            ?>
-        </p>
+                    <div class="detail-label">
+                        Title
+                    </div>
+
+                    <div class="detail-value">
+
+                        <?php
+                        echo htmlspecialchars(
+                            $task["title"]
+                        );
+                        ?>
+
+                    </div>
+
+                </div>
 
 
-    </fieldset>
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Employee
+                    </div>
+
+                    <div class="detail-value">
+
+                        <?php
+                        echo htmlspecialchars(
+                            $task["employeeName"]
+                        );
+                        ?>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Start Date
+                    </div>
+
+                    <div class="detail-value">
+
+                        <?php
+                        echo htmlspecialchars(
+                            $task["startDate"]
+                        );
+                        ?>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Due Date
+                    </div>
+
+                    <div class="detail-value">
+
+                        <?php
+                        echo htmlspecialchars(
+                            $task["dueDate"]
+                        );
+                        ?>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Status
+                    </div>
+
+                    <div class="detail-value">
+
+                        <span
+                            class="badge badge-<?php
+                                echo htmlspecialchars(
+                                    $task["status"]
+                                );
+                            ?>"
+                        >
+
+                            <?php
+                            echo htmlspecialchars(
+                                $task["status"]
+                            );
+                            ?>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Priority
+                    </div>
+
+                    <div class="detail-value">
+
+                        <span
+                            class="badge badge-<?php
+                                echo htmlspecialchars(
+                                    $task["priority"]
+                                );
+                            ?>"
+                        >
+
+                            <?php
+                            echo htmlspecialchars(
+                                $task["priority"]
+                            );
+                            ?>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    Description
+                </div>
+
+
+                <p>
+
+                    <?php
+
+                    echo nl2br(
+                        htmlspecialchars(
+                            $task["description"] ?? ""
+                        )
+                    );
+
+                    ?>
+
+                </p>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
 
 </body>
 
 </html>
+
