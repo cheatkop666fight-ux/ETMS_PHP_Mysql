@@ -2,7 +2,7 @@
 require_once "../../includes/admin_auth.php";
 require_once "../../config/database.php";
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST"){
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: create.php");
     exit;
 }
@@ -12,37 +12,45 @@ $email = trim($_POST["email"]);
 $username = trim($_POST["username"]);
 
 $password = $_POST["password"];
-$conpassword = $_POST["conpassword"];
+$confirm_password = $_POST["confirm_password"];
 
-if(
-    $name === "" || 
+if (
+    $name === "" ||
     $email === "" ||
     $username === "" ||
     $password === "" ||
-    $conpassword === "" 
-){
+    $confirm_password === ""
+) {
     die("All fields are required.");
 }
-if ($password !== $conpassword){
+if ($password !== $confirm_password) {
     die("Password and confirm password is not match.");
 }
 
 $hashed_password = password_hash(
-    $password, PASSWORD_DEFAULT
+    $password,
+    PASSWORD_DEFAULT
 );
 
 $role = "employee";
 
 $stmt = mysqli_prepare(
-    $conn, "
+    $conn,
+    "
     INSERT INTO users (name,email,username, password, role)
     VALUE (?, ?, ?, ?, ?)"
 );
 mysqli_stmt_bind_param(
-    $stmt,"sssss",$name,$email,$username,$hashed_password,$role
+    $stmt,
+    "sssss",
+    $name,
+    $email,
+    $username,
+    $hashed_password,
+    $role
 );
 
-if(mysqli_stmt_execute($stmt)){
+if (mysqli_stmt_execute($stmt)) {
     mysqli_stmt_close($stmt);
     header("Location: index.php");
     exit;
@@ -50,5 +58,3 @@ if(mysqli_stmt_execute($stmt)){
 
 echo "Failed to create employee. <br> " . mysqli_stmt_error($stmt);
 mysqli_stmt_close($stmt);
-
-?>
