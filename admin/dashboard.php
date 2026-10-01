@@ -13,7 +13,6 @@ $result = mysqli_query(
 
 $employeeCount = mysqli_fetch_assoc($result);
 
-
 $result = mysqli_query(
     $conn,
     "SELECT COUNT(*) AS total
