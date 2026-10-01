@@ -104,7 +104,16 @@ CREATE TABLE tasks (
 
 
 -- =========================================================
--- 5. INSERT USERS
+-- DEFAULT USERS
+-- =========================================================
+--
+-- Password for BOTH accounts:
+-- 12345
+--
+-- The values below are hashes generated using:
+--
+-- password_hash('12345', PASSWORD_DEFAULT)
+--
 -- =========================================================
 
 INSERT INTO users
@@ -116,12 +125,11 @@ INSERT INTO users
     role
 )
 VALUES
-
 (
     'Administrator',
     'admin@example.com',
     'admin',
-    '12345',
+    '$2y$12$oS/y1puNY1cE4wn2PGGZgOWaYF6PgIr2UZsfNgQDa7zHV39hv2gv.',
     'admin'
 ),
 
@@ -129,10 +137,9 @@ VALUES
     'John Employee',
     'john@example.com',
     'john',
-    '12345',
+    '$2y$12$1rWYU.Y0rl4R3f7hzQV6tuZUde1xCEnQowxPh59BR9zRUby6nywKq',
     'employee'
 );
-
 
 -- =========================================================
 -- 6. INSERT SAMPLE TASKS
