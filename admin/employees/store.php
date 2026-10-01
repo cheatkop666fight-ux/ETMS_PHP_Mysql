@@ -1,4 +1,5 @@
 <?php
+
 require_once "../../includes/admin_auth.php";
 require_once "../../config/database.php";
 
@@ -7,54 +8,153 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-$name = trim($_POST["name"]);
-$email = trim($_POST["email"]);
-$username = trim($_POST["username"]);
 
-$password = $_POST["password"];
-$confirm_password = $_POST["confirm_password"];
+$name = trim($_POST["name"] ?? "");
+$email = trim($_POST["email"] ?? "");
+$username = trim($_POST["username"] ?? "");
+$password = $_POST["password"] ?? "";
+$confirmPassword = $_POST["confirm_password"] ?? "";
+
+
+// ========================================
+// Basic validation
+// ========================================
 
 if (
     $name === "" ||
     $email === "" ||
     $username === "" ||
     $password === "" ||
-    $confirm_password === ""
+    $confirmPassword === ""
 ) {
-    die("All fields are required.");
-}
-if ($password !== $confirm_password) {
-    die("Password and confirm password is not match.");
+    header("Location: create.php?error=" . urlencode(
+        "Please fill in all fields."
+    ));
+    exit;
 }
 
-$hashed_password = password_hash(
+
+// ========================================
+// Check password confirmation
+// ========================================
+
+if ($password !== $confirmPassword) {
+
+    header("Location: create.php?error=" . urlencode(
+        "Passwords do not match."
+    ));
+
+    exit;
+}
+
+
+// ========================================
+// Check duplicate email OR username
+// ========================================
+
+$check = $conn->prepare("
+    SELECT id, email, username
+    FROM users
+    WHERE email = ? OR username = ?
+");
+
+$check->bind_param(
+    "ss",
+    $email,
+    $username
+);
+
+$check->execute();
+
+$result = $check->get_result();
+
+
+if ($result->num_rows > 0) {
+
+    $existingUser = $result->fetch_assoc();
+
+
+    // ========================================
+    // Duplicate email
+    // ========================================
+
+    if (strcasecmp($existingUser["email"], $email) === 0) {
+
+        header("Location: create.php?error=" . urlencode(
+            "Email already exists."
+        ));
+
+        exit;
+    }
+
+
+    // ========================================
+    // Duplicate username
+    // ========================================
+
+    if (strcasecmp($existingUser["username"], $username) === 0) {
+
+        header("Location: create.php?error=" . urlencode(
+            "Username already exists."
+        ));
+
+        exit;
+    }
+}
+
+
+// ========================================
+// Hash password
+// ========================================
+
+$hashedPassword = password_hash(
     $password,
     PASSWORD_DEFAULT
 );
 
-$role = "employee";
 
-$stmt = mysqli_prepare(
-    $conn,
-    "
-    INSERT INTO users (name,email,username, password, role)
-    VALUE (?, ?, ?, ?, ?)"
-);
-mysqli_stmt_bind_param(
-    $stmt,
-    "sssss",
+// ========================================
+// Insert employee
+// ========================================
+
+$stmt = $conn->prepare("
+    INSERT INTO users
+    (
+        name,
+        email,
+        username,
+        password,
+        role
+    )
+    VALUES (?, ?, ?, ?, 'employee')
+");
+
+
+$stmt->bind_param(
+    "ssss",
     $name,
     $email,
     $username,
-    $hashed_password,
-    $role
+    $hashedPassword
 );
 
-if (mysqli_stmt_execute($stmt)) {
-    mysqli_stmt_close($stmt);
-    header("Location: index.php");
+
+if ($stmt->execute()) {
+
+    header("Location: index.php?success=" . urlencode(
+        "Employee created successfully."
+    ));
+
     exit;
 }
 
-echo "Failed to create employee. <br> " . mysqli_stmt_error($stmt);
-mysqli_stmt_close($stmt);
+
+// ========================================
+// Unexpected database error
+// ========================================
+
+header("Location: create.php?error=" . urlencode(
+    "Failed to create employee."
+));
+
+exit;

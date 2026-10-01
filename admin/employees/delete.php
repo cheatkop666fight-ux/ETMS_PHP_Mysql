@@ -17,19 +17,39 @@ $id = $_POST["id"] ?? "";
 
 if (!is_numeric($id)) {
 
-    die("Invalid employee ID.");
+    header("Location: index.php?error=" . urlencode(
+        "Invalid employee ID."
+    ));
+
+    exit;
 }
 
 
 $id = (int) $id;
 
 
+// ========================================
+// Delete employee
+// ========================================
+
 $stmt = mysqli_prepare(
     $conn,
-    "DELETE FROM users
-     WHERE id = ?
-     AND role = 'employee'"
+    "
+    DELETE FROM users
+    WHERE id = ?
+    AND role = 'employee'
+    "
 );
+
+
+if (!$stmt) {
+
+    header("Location: index.php?error=" . urlencode(
+        "Failed to prepare delete request."
+    ));
+
+    exit;
+}
 
 
 mysqli_stmt_bind_param(
@@ -41,19 +61,40 @@ mysqli_stmt_bind_param(
 
 if (mysqli_stmt_execute($stmt)) {
 
+    // Check whether an employee was actually deleted
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
+
+        mysqli_stmt_close($stmt);
+
+        header("Location: index.php?success=" . urlencode(
+            "Employee deleted successfully."
+        ));
+
+        exit;
+    }
+
     mysqli_stmt_close($stmt);
 
-    header("Location: index.php");
+    header("Location: index.php?error=" . urlencode(
+        "Employee not found."
+    ));
 
     exit;
 }
 
 
-echo "Failed to delete employee.";
+// ========================================
+// Database error
+// ========================================
 
-echo "<br>";
-
-echo mysqli_stmt_error($stmt);
-
+$error = mysqli_stmt_error($stmt);
 
 mysqli_stmt_close($stmt);
+
+
+header("Location: index.php?error=" . urlencode(
+    "Failed to delete employee: " . $error
+));
+
+exit;
+

@@ -17,6 +17,13 @@ if (!$result) {
 }
 
 ?>
+<?php if (isset($_GET["success"])): ?>
+
+    <div class="popup popup-success">
+        <?= htmlspecialchars($_GET["success"]) ?>
+    </div>
+
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,239 +34,244 @@ if (!$result) {
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>ETMS // Employees</title>
 
     <link
         rel="stylesheet"
-        href="/ETMS/assets/css/style.css"
-    >
+        href="/ETMS/assets/css/style.css">
 
 </head>
 
 
 <body>
 
-<div class="app">
-
-
-    <?php
-    require_once "../../includes/admin_sidebar.php";
-    ?>
-
-
-    <div class="main">
+    <div class="app">
 
 
         <?php
-        require_once "../../includes/topbar.php";
+        require_once "../../includes/admin_sidebar.php";
         ?>
 
 
-        <main class="content">
+        <div class="main">
 
 
-            <div class="page-header">
+            <?php
+            require_once "../../includes/topbar.php";
+            ?>
 
-                <div>
 
-                    <h1>
-                        Employees
-                    </h1>
+            <main class="content">
 
-                    <p>
-                        USER MANAGEMENT // EMPLOYEE RECORDS
-                    </p>
+
+                <div class="page-header">
+
+                    <div>
+
+                        <h1>
+                            Employees
+                        </h1>
+
+                        <p>
+                            USER MANAGEMENT // EMPLOYEE RECORDS
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        class="btn btn-primary"
+                        href="create.php">
+                        + Add Employee
+                    </a>
 
                 </div>
 
 
-                <a
-                    class="btn btn-primary"
-                    href="create.php"
-                >
-                    + Add Employee
-                </a>
+                <div class="table-container">
 
-            </div>
+                    <table>
 
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>ID</th>
-
-                            <th>Name</th>
-
-                            <th>Email</th>
-
-                            <th>Username</th>
-
-                            <th>Role</th>
-
-                            <th>Created</th>
-
-                            <th>Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                    <?php
-                    if (mysqli_num_rows($result) === 0):
-                    ?>
-
-                        <tr>
-
-                            <td colspan="7">
-
-                                <div class="empty-state">
-                                    No employees found.
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    <?php
-                    else:
-                    ?>
-
-                        <?php
-                        while (
-                            $employee =
-                            mysqli_fetch_assoc($result)
-                        ):
-                        ?>
+                        <thead>
 
                             <tr>
 
-                                <td>
-                                    #
-                                    <?php
-                                    echo $employee["id"];
-                                    ?>
-                                </td>
+                                <th>ID</th>
 
+                                <th>Name</th>
 
-                                <td>
+                                <th>Email</th>
 
-                                    <strong>
+                                <th>Username</th>
 
-                                        <?php
-                                        echo htmlspecialchars(
-                                            $employee["name"]
-                                        );
-                                        ?>
+                                <th>Role</th>
 
-                                    </strong>
+                                <th>Created</th>
 
-                                </td>
-
-
-                                <td>
-
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $employee["email"]
-                                    );
-                                    ?>
-
-                                </td>
-
-
-                                <td>
-
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $employee["username"]
-                                    );
-                                    ?>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="badge badge-completed">
-                                        EMPLOYEE
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $employee["createdAt"]
-                                    );
-                                    ?>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <a
-                                            class="btn btn-primary"
-                                            href="edit.php?id=<?php
-                                                echo $employee["id"];
-                                            ?>"
-                                        >
-                                            Edit
-                                        </a>
-
-
-                                        <a
-                                            class="btn btn-danger"
-                                            href="delete.php?id=<?php
-                                                echo $employee["id"];
-                                            ?>"
-                                        >
-                                            Delete
-                                        </a>
-
-                                    </div>
-
-                                </td>
+                                <th>Actions</th>
 
                             </tr>
 
-                        <?php
-                        endwhile;
-                        ?>
-
-                    <?php
-                    endif;
-                    ?>
-
-                    </tbody>
-
-                </table>
-
-            </div>
+                        </thead>
 
 
-        </main>
+                        <tbody>
+
+                            <?php
+                            if (mysqli_num_rows($result) === 0):
+                            ?>
+
+                                <tr>
+
+                                    <td colspan="7">
+
+                                        <div class="empty-state">
+                                            No employees found.
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php
+                            else:
+                            ?>
+
+                                <?php
+                                while (
+                                    $employee =
+                                    mysqli_fetch_assoc($result)
+                                ):
+                                ?>
+
+                                    <tr>
+
+                                        <td>
+                                            #
+                                            <?php
+                                            echo $employee["id"];
+                                            ?>
+                                        </td>
+
+
+                                        <td>
+
+                                            <strong>
+
+                                                <?php
+                                                echo htmlspecialchars(
+                                                    $employee["name"]
+                                                );
+                                                ?>
+
+                                            </strong>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <?php
+                                            echo htmlspecialchars(
+                                                $employee["email"]
+                                            );
+                                            ?>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <?php
+                                            echo htmlspecialchars(
+                                                $employee["username"]
+                                            );
+                                            ?>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <span class="badge badge-completed">
+                                                EMPLOYEE
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <?php
+                                            echo htmlspecialchars(
+                                                $employee["createdAt"]
+                                            );
+                                            ?>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <div class="actions">
+
+                                                <a
+                                                    class="btn btn-primary"
+                                                    href="edit.php?id=<?php
+                                                                        echo $employee["id"];
+                                                                        ?>">
+                                                    Edit
+                                                </a>
+
+
+                                                <form
+                                                    action="delete.php"
+                                                    method="post"
+                                                    onsubmit="return confirm('Are you sure you want to delete this employee?');"
+                                                    style="display: inline;">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="id"
+                                                        value="<?= $employee["id"] ?>">
+
+                                                    <button
+                                                        class="btn btn-danger"
+                                                        type="submit">
+                                                        Delete
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                <?php
+                                endwhile;
+                                ?>
+
+                            <?php
+                            endif;
+                            ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </main>
+
+        </div>
 
     </div>
-
-</div>
 
 </body>
 
 </html>
-

@@ -228,7 +228,7 @@ if (!$employees) {
                                 <?php
                                 while (
                                     $employee =
-                                    mysqli_fetch_assoc($result)
+                                    mysqli_fetch_assoc($employees)
                                 ):
                                 ?>
 

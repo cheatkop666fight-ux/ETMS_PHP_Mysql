@@ -1,5 +1,6 @@
 <?php
-require_once "../../includes/admin_auth.php"
+// admin/employees/create.php
+require_once "../../includes/admin_auth.php";
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +27,7 @@ require_once "../../includes/admin_auth.php"
 
 <body>
 
+
 <div class="app">
 
 
@@ -40,6 +42,28 @@ require_once "../../includes/admin_auth.php"
         <?php
         require_once "../../includes/topbar.php";
         ?>
+
+
+        <?php if (isset($_GET["error"])): ?>
+
+            <div
+                class="popup popup-error"
+                id="errorPopup"
+            >
+                <span>
+                    <?= htmlspecialchars($_GET["error"]) ?>
+                </span>
+
+                <button
+                    type="button"
+                    class="popup-close"
+                    onclick="closePopup()"
+                >
+                    ×
+                </button>
+            </div>
+
+        <?php endif; ?>
 
 
         <main class="content">
@@ -189,6 +213,23 @@ require_once "../../includes/admin_auth.php"
 
 </div>
 
+
+<script>
+
+function closePopup() {
+
+    const popup = document.getElementById("errorPopup");
+
+    if (popup) {
+        popup.remove();
+    }
+
+}
+
+</script>
+
+
 </body>
 
 </html>
+
